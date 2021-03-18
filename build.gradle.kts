@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import io.freefair.gradle.plugins.aspectj.AspectjCompile
 
 plugins {
     // apply the application plugin to add support for building a java application
@@ -6,6 +7,9 @@ plugins {
 
     // shadow plugin for building fat jar (jar that includes dependencies)
     id("com.github.johnrengelman.shadow") version "6.1.0"
+
+    // plugin that enables usage of aspects
+    id("io.freefair.aspectj") version "5.3.0"
 }
 
 group = "engineer.mathias"
@@ -22,6 +26,9 @@ dependencies {
     // Log4J
     implementation("org.apache.logging.log4j:log4j-api:2.13.3")
     implementation("org.apache.logging.log4j:log4j-core:2.13.3")
+
+    // Aspect J
+    implementation("org.aspectj:aspectjrt:1.9.6")
 }
 
 // configure the java version
@@ -37,6 +44,11 @@ application {
 }
 
 tasks {
+
+    withType<AspectjCompile> {
+        source(sourceSets["main"].java.sourceDirectories)
+        destinationDir = sourceSets["main"].java.outputDir
+    }
 
     withType<JavaCompile> {
         dependsOn("clean")
