@@ -1,4 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import io.freefair.gradle.plugins.aspectj.AspectjCompile
 
 plugins {
@@ -58,14 +57,6 @@ tasks {
         useJUnitPlatform()
         testLogging {
             events("passed", "skipped", "failed")
-        }
-    }
-
-    withType<ShadowJar> {
-        // minimise dependencies
-        minimize {
-            // exclude the following dependencies from minimising
-            exclude(dependency("org.apache.logging.log4j:log4j-core:.*"))
         }
     }
 
