@@ -6,6 +6,9 @@ plugins {
 
     // shadow plugin for building fat jar (jar that includes dependencies)
     id("com.github.johnrengelman.shadow") version "6.1.0"
+
+    // plugin used to include javafx
+    id("org.openjfx.javafxplugin") version "0.0.9"
 }
 
 group = "engineer.mathias"
@@ -31,9 +34,13 @@ java {
     }
 }
 
+javafx {
+    modules("javafx.controls", "javafx.fxml")
+}
+
 application {
     // define the main class for the application - need to use deprecated way because of shadow plugin
-    mainClassName = "App"
+    mainClassName = "Main"
 }
 
 tasks {
@@ -52,8 +59,9 @@ tasks {
     withType<ShadowJar> {
         // minimise dependencies
         minimize {
-            // exclude the following dependencies from minimising
+            // exclude log4j and javafx from minimising (won't work otherwise)
             exclude(dependency("org.apache.logging.log4j:log4j-core:.*"))
+            exclude(dependency("org.openjfx:.*:.*"))
         }
     }
 
